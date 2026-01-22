@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>英倫舊港 | 策展規劃儀表板</title>
+    
+    <!-- Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <!-- 顏色配置：紙墨古金色調 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'hk-paper': '#fdfbf7',
+                        'hk-ink': '#292524',
+                        'hk-red': '#be123c',
+                        'hk-gold': '#b45309',
+                        'hk-teal': '#0f766e',
+                        'hk-stone': '#a8a29e',
+                    },
+                    fontFamily: {
+                        serif: ['"Noto Serif TC"', 'serif'],
+                        sans: ['"Inter"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #fdfbf7;
+            color: #292524;
+        }
+        .chart-container {
+            position: relative; 
+            width: 100%; 
+            max-width: 800px; 
+            margin-left: auto; 
+            margin-right: auto; 
+            height: 350px;
+            max-height: 400px;
+        }
+        .timeline-node {
+            transition: all 0.3s ease;
+        }
+        .timeline-node:hover {
+            transform: scale(1.1);
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .scroller::-webkit-scrollbar {
+            width: 6px;
+        }
+        .scroller::-webkit-scrollbar-track {
+            background: #f5f5f4; 
+        }
+        .scroller::-webkit-scrollbar-thumb {
+            background: #d6d3d1; 
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-hk-gold selection:text-white">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-hk-paper/95 backdrop-blur border-b border-stone-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center gap-2">
+                        <span class="text-2xl font-serif font-bold text-hk-ink tracking-tight">英倫舊港</span>
+                        <span class="text-xs uppercase tracking-widest text-hk-gold border border-hk-gold px-1 rounded font-bold">策展檢視</span>
+                    </div>
+                </div>
+                <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                    <a href="#collection" class="border-transparent text-stone-500 hover:border-hk-gold hover:text-hk-ink inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors">館藏分析</a>
+                    <a href="#timeline" class="border-transparent text-stone-500 hover:border-hk-gold hover:text-hk-ink inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors">歷史脈絡</a>
+                    <a href="#themes" class="border-transparent text-stone-500 hover:border-hk-gold hover:text-hk-ink inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors">展覽分區</a>
+                    <a href="#strategy" class="border-transparent text-stone-500 hover:border-hk-gold hover:text-hk-ink inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors">京士頓策略</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-20">
+
+        <!-- Section 1: Introduction -->
+        <section class="text-center max-w-3xl mx-auto">
+            <h1 class="text-4xl sm:text-5xl font-serif font-bold text-hk-ink mb-6">封存：在異鄉重塑舊城紀事</h1>
+            <p class="text-lg text-stone-600 leading-relaxed mb-8">
+                歡迎使用<strong>「英倫舊港」(Old HK in UK)</strong> 策展規劃儀表板。
+                我們從跨越 38 個類別的檔案中——從 1973 年的<em>香港節</em>到日常的<em>百貨公司包裝紙</em>——提取歷史碎片。本次展覽旨在重建殖民時期香港的感官體驗，並以此作為與英國在地社群對話的橋樑。
+            </p>
+            <div class="flex justify-center gap-4">
+                <div class="px-6 py-3 bg-stone-100 rounded-lg border border-stone-200">
+                    <span class="block text-2xl font-bold text-hk-teal">38+</span>
+                    <span class="text-xs font-bold text-stone-500">藏品類別</span>
+                </div>
+                <div class="px-6 py-3 bg-stone-100 rounded-lg border border-stone-200">
+                    <span class="block text-2xl font-bold text-hk-gold">1932-2022</span>
+                    <span class="text-xs font-bold text-stone-500">年代跨度</span>
+                </div>
+                <div class="px-6 py-3 bg-stone-100 rounded-lg border border-stone-200">
+                    <span class="block text-2xl font-bold text-hk-red">Kingston</span>
+                    <span class="text-xs font-bold text-stone-500">首展地點</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Collection Analytics -->
+        <section id="collection" class="scroll-mt-24">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-1 space-y-4">
+                    <h2 class="text-2xl font-serif font-bold text-hk-ink border-l-4 border-hk-gold pl-4">館藏清單分析</h2>
+                    <p class="text-sm text-stone-600 leading-relaxed">
+                        根據清單分析，我們的館藏在<strong>公民與圖形歷史 (Civic & Graphic History)</strong> 方面具有極高優勢。大量的政府刊物、地圖和郵票構成了一條清晰的「行政身份」敘事線。同時，百貨公司物件與雷鳴春家族檔案則提供了珍貴的生活感。
+                    </p>
+                    <div class="bg-white p-4 rounded-lg shadow-sm border border-stone-100">
+                        <h3 class="font-bold text-hk-teal mb-2">重點館藏項目</h3>
+                        <ul class="text-sm space-y-2 text-stone-600">
+                            <li class="flex items-start gap-2">
+                                <span class="text-hk-gold">•</span>
+                                完整的 1969、71、73 年香港節物件
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-hk-gold">•</span>
+                                200 餘幅古地圖 (1932-1990)
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-hk-gold">•</span>
+                                雷鳴春家族檔案 (Lui Ming Chun)
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-sm border border-stone-200">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-stone-700">物件類別分佈 (估算密度)</h3>
+                        <select id="chartFilter" class="text-xs border-stone-300 rounded-md shadow-sm">
+                            <option value="all">顯示全部</option>
+                            <option value="paper">紙本檔案</option>
+                            <option value="objects">實體物件</option>
+                        </select>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="inventoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Historical Timeline -->
+        <section id="timeline" class="scroll-mt-24 bg-stone-100 rounded-2xl p-8 border border-stone-200">
+            <div class="mb-8">
+                <h2 class="text-2xl font-serif font-bold text-hk-ink mb-2">歷史時空對照</h2>
+                <p class="text-stone-600">透過時光流轉，查看每個歷史階段最具代表性的館藏物件。</p>
+            </div>
+
+            <!-- Timeline Track -->
+            <div class="relative w-full mb-10 pt-4">
+                <div class="absolute top-1/2 left-0 w-full h-1 bg-stone-300 -translate-y-1/2 rounded"></div>
+                <div class="relative flex justify-between items-center z-10">
+                    <div id="timelineTrack" class="flex justify-between w-full px-4"></div>
+                </div>
+            </div>
+
+            <!-- Context Display -->
+            <div id="timelineDisplay" class="grid grid-cols-1 md:grid-cols-2 gap-8 bg-white p-6 rounded-xl border border-stone-200 transition-all duration-300">
+                <div>
+                    <h3 id="periodTitle" class="text-xl font-bold text-hk-teal mb-2">請選擇年份</h3>
+                    <p id="periodDesc" class="text-stone-600 text-sm leading-relaxed">
+                        我們的收藏涵蓋了從 1932 年的戰前地圖到 1997 年移交前的政府報告。點擊上方節點，探索該時期的展覽潛力。
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-stone-400 mb-3">代表性庫存物件</h4>
+                    <ul id="periodArtifacts" class="space-y-2">
+                        <li class="text-sm text-stone-500 italic">請選擇年代...</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Exhibition Themes -->
+        <section id="themes" class="scroll-mt-24">
+            <div class="mb-10">
+                <h2 class="text-2xl font-serif font-bold text-hk-ink mb-4 border-l-4 border-hk-red pl-4">推薦策展分區</h2>
+                <p class="text-stone-600 max-w-3xl">為了讓展覽具備敘事性，我們建議將物件劃分為三個沉浸式區域。這些區域結合了視覺衝擊與情感聯繫。</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Theme 1 -->
+                <div class="group card-hover bg-white p-6 rounded-xl border border-stone-200 cursor-pointer relative overflow-hidden transition-all">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <span class="text-6xl text-hk-teal">⚖️</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-hk-ink mb-2 group-hover:text-hk-teal">秩序與美學</h3>
+                    <p class="text-xs font-bold text-stone-400 uppercase mb-4">官式檔案與文字設計</p>
+                    <p class="text-sm text-stone-600 mb-4 leading-relaxed">
+                        探索殖民政府的視覺語言。如何透過地圖、徽章與排版，建立一種「有序」的社會觀感。
+                    </p>
+                    <div class="border-t border-stone-100 pt-3">
+                        <span class="text-xs font-semibold text-hk-teal">核心物件：</span>
+                        <div class="flex flex-wrap gap-2 mt-2">
+                            <span class="px-2 py-1 bg-stone-100 text-stone-600 text-xs rounded">地圖展</span>
+                            <span class="px-2 py-1 bg-stone-100 text-stone-600 text-xs rounded">政府刊物</span>
+                            <span class="px-2 py-1 bg-stone-100 text-stone-600 text-xs rounded">郵票</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Theme 2 -->
+                <div class="group card-hover bg-white p-6 rounded-xl border border-stone-200 cursor-pointer relative overflow-hidden transition-all">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <span class="text-6xl text-hk-gold">🛍️</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-hk-ink mb-2 group-hover:text-hk-gold">黃金消費年代</h3>
+                    <p class="text-xs font-bold text-stone-400 uppercase mb-4">零售、節慶與日常</p>
+                    <p class="text-sm text-stone-600 mb-4 leading-relaxed">
+                        還原 70-80 年代經濟騰飛時的感官。百貨公司的繽紛包裝、火柴盒與市民的慶祝文化。
+                    </p>
+                    <div class="border-t border-stone-100 pt-3">
+                        <span class="text-xs font-semibold text-hk-gold">核心物件：</span>
+                        <div class="flex flex-wrap gap-2 mt-2">
+                            <span class="px-2 py-1 bg-stone-100 text-stone-600 text-xs rounded">包裝紙</span>
+                            <span class="px-2 py-1 bg-stone-100 text-stone-600 text-xs rounded">百貨贈品</span>
+                            <span class="px-2 py-1 bg-stone-100 text-stone-600 text-xs rounded">火柴盒</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Theme 3 -->
+                <div class="group card-hover bg-white p-6 rounded-xl border border-stone-200 cursor-pointer relative overflow-hidden transition-all">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <span class="text-6xl text-hk-red">🎭</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-hk-ink mb-2 group-hover:text-hk-red">流動的身份</h3>
+                    <p class="text-xs font-bold text-stone-400 uppercase mb-4">家族記憶與個人紀錄</p>
+                    <p class="text-sm text-stone-600 mb-4 leading-relaxed">
+                        展示香港人如何透過個人檔案與家族收藏定義身份。特別是<strong>雷鳴春家族</strong>的藝術品與信件。
+                    </p>
+                    <div class="border-t border-stone-100 pt-3">
+                        <span class="text-xs font-semibold text-hk-red">核心物件：</span>
+                        <div class="flex flex-wrap gap-2 mt-2">
+                            <span class="px-2 py-1 bg-stone-100 text-stone-600 text-xs rounded">雷鳴春檔案</span>
+                            <span class="px-2 py-1 bg-stone-100 text-stone-600 text-xs rounded">學校紀錄</span>
+                            <span class="px-2 py-1 bg-stone-100 text-stone-600 text-xs rounded">香港節物件</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Kingston Strategy -->
+        <section id="strategy" class="scroll-mt-24 mb-20">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="order-2 lg:order-1">
+                    <h2 class="text-2xl font-serif font-bold text-hk-ink mb-4 border-l-4 border-hk-teal pl-4">京士頓 (Kingston) 首展策略</h2>
+                    <p class="text-stone-600 mb-6 leading-relaxed">
+                        京士頓區擁有顯著的港人移民密度。我們的策略是：首波以<strong>「懷舊與共鳴」</strong>鎖定移英港人，建立社區歸屬感；隨後轉向<strong>「設計與歷史」</strong>，吸引英國在地大眾。
+                    </p>
+                    
+                    <div class="space-y-6">
+                        <!-- Step 1 -->
+                        <div>
+                            <div class="flex justify-between text-sm font-medium text-stone-700 mb-1">
+                                <span>第一階段：離散社群（重建連結）</span>
+                                <span>優先度：極高</span>
+                            </div>
+                            <div class="w-full bg-stone-200 rounded-full h-2">
+                                <div class="bg-hk-gold h-2 rounded-full" style="width: 85%"></div>
+                            </div>
+                            <p class="text-xs text-stone-500 mt-1">重點：古地圖、校園紀錄。強化共鳴。</p>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div>
+                            <div class="flex justify-between text-sm font-medium text-stone-700 mb-1">
+                                <span>第二階段：英國本地公眾（文化傳播）</span>
+                                <span>優先度：中</span>
+                            </div>
+                            <div class="w-full bg-stone-200 rounded-full h-2">
+                                <div class="bg-hk-teal h-2 rounded-full" style="width: 45%"></div>
+                            </div>
+                            <p class="text-xs text-stone-500 mt-1">重點：雷鳴春藝術品、政府美學。提供歷史背景。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="order-1 lg:order-2 bg-white p-6 rounded-xl border border-stone-200 shadow-sm text-center">
+                    <h3 class="text-sm font-bold text-stone-500 uppercase tracking-wide mb-4">預期觀眾互動分佈</h3>
+                    <div class="chart-container" style="height: 300px;">
+                        <canvas id="strategyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-900 text-stone-400 py-12 border-t border-stone-800">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="font-serif text-lg text-stone-200 mb-4 tracking-widest">英倫舊港 OLD HK IN UK</p>
+            <p class="text-sm">歷史的守望者 | 檔案庫由 John Wu 創立</p>
+            <div class="mt-8 text-xs text-stone-600">
+                數據來源：香港圖形檔案 (HK Graphic Archive), 內部物件清單。
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- 數據資料 ---
+        const inventoryData = [
+            { label: "政府刊物及單張", value: 18, category: "paper", color: "#0f766e" }, 
+            { label: "地圖 (1932-1990)", value: 25, category: "paper", color: "#0f766e" },
+            { label: "香港節 (69, 71, 73)", value: 22, category: "objects", color: "#b45309" }, 
+            { label: "百貨公司相關物件", value: 15, category: "objects", color: "#b45309" },
+            { label: "郵票與首日封", value: 28, category: "paper", color: "#0f766e" },
+            { label: "雷鳴春家族檔案", value: 20, category: "objects", color: "#be123c" }, 
+            { label: "火柴盒", value: 14, category: "objects", color: "#b45309" },
+            { label: "銀行與金融相關", value: 12, category: "paper", color: "#0f766e" }
+        ];
+
+        const timelineData = [
+            { year: "1932", title: "戰前地景", desc: "收藏中最早的地圖紀錄。這些文件確立了戰前殖民地邊界與城市佈局基礎。", items: ["200+ 地圖珍藏", "早期土地紀錄"] },
+            { year: "1969", title: "香港節誕生", desc: "首屆香港節，作為政府建立社會凝聚力的重要措施。在地身份認同的萌芽點。", items: ["第一屆宣傳單張", "紀念郵票"] },
+            { year: "1973", title: "黃金節慶", desc: "檔案中 1973 年香港節物件最為完整。反映了「東方之珠」品牌化的全盛時期。", items: ["首日封", "節目表", "報紙剪輯"] },
+            { year: "1980s", title: "經濟起飛", desc: "消費主義抬頭。百貨公司興起與廣東歌黃金年代的印記。", items: ["百貨包裝紙", "黑膠唱片", "雷鳴春收藏"] },
+            { year: "1997", title: "政權移交前夕", desc: "移交前的官方文件與標識更替。旗幟、徽章與行政紀錄的轉變。", items: ["政府海報", "制服徽章", "最後年度報告"] }
+        ];
+
+        // --- 圖表實作 ---
+        const ctxInventory = document.getElementById('inventoryChart').getContext('2d');
+        let inventoryChart = new Chart(ctxInventory, {
+            type: 'bar',
+            data: {
+                labels: inventoryData.map(d => d.label),
+                datasets: [{
+                    label: '物件數量估算',
+                    data: inventoryData.map(d => d.value),
+                    backgroundColor: inventoryData.map(d => d.color),
+                    borderRadius: 4,
+                    barThickness: 20
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                maintainAspectRatio: false,
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: { grid: { display: false } },
+                    y: { grid: { display: false } }
+                }
+            }
+        });
+
+        const ctxStrategy = document.getElementById('strategyChart').getContext('2d');
+        new Chart(ctxStrategy, {
+            type: 'doughnut',
+            data: {
+                labels: ['港人懷舊', '文化教育', '設計美學'],
+                datasets: [{
+                    data: [55, 30, 15],
+                    backgroundColor: ['#b45309', '#0f766e', '#a8a29e'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20 } }
+                },
+                cutout: '70%'
+            }
+        });
+
+        // --- 互動邏輯 ---
+        document.getElementById('chartFilter').addEventListener('change', (e) => {
+            const filter = e.target.value;
+            const filteredData = filter === 'all' 
+                ? inventoryData 
+                : inventoryData.filter(d => d.category === filter);
+            
+            inventoryChart.data.labels = filteredData.map(d => d.label);
+            inventoryChart.data.datasets[0].data = filteredData.map(d => d.value);
+            inventoryChart.data.datasets[0].backgroundColor = filteredData.map(d => d.color);
+            inventoryChart.update();
+        });
+
+        const timelineTrack = document.getElementById('timelineTrack');
+        const periodTitle = document.getElementById('periodTitle');
+        const periodDesc = document.getElementById('periodDesc');
+        const periodArtifacts = document.getElementById('periodArtifacts');
+
+        function initTimeline() {
+            timelineData.forEach((item, index) => {
+                const node = document.createElement('div');
+                node.className = `timeline-node cursor-pointer flex flex-col items-center group relative z-20`;
+                node.innerHTML = `
+                    <div class="w-4 h-4 rounded-full bg-stone-300 border-2 border-white group-hover:bg-hk-gold transition-colors shadow-sm mb-2"></div>
+                    <span class="text-xs font-bold text-stone-500 group-hover:text-hk-ink">${item.year}</span>
+                `;
+                
+                node.addEventListener('click', () => {
+                    document.querySelectorAll('.timeline-node div').forEach(d => {
+                        d.classList.remove('bg-hk-gold', 'scale-125');
+                        d.classList.add('bg-stone-300');
+                    });
+                    node.querySelector('div').classList.remove('bg-stone-300');
+                    node.querySelector('div').classList.add('bg-hk-gold', 'scale-125');
+
+                    periodTitle.textContent = `${item.year}: ${item.title}`;
+                    periodDesc.textContent = item.desc;
+                    
+                    periodArtifacts.innerHTML = '';
+                    item.items.forEach(artifact => {
+                        const li = document.createElement('li');
+                        li.className = "flex items-center gap-2 text-sm text-stone-700 p-2 bg-stone-50 rounded border border-stone-100";
+                        li.innerHTML = `<span class="text-hk-gold text-lg">•</span> ${artifact}`;
+                        periodArtifacts.appendChild(li);
+                    });
+
+                    const display = document.getElementById('timelineDisplay');
+                    display.classList.add('opacity-50');
+                    setTimeout(() => display.classList.remove('opacity-50'), 150);
+                });
+
+                timelineTrack.appendChild(node);
+            });
+            setTimeout(() => { timelineTrack.children[0].click(); }, 100);
+        }
+
+        initTimeline();
+    </script>
+</body>
+</html>
